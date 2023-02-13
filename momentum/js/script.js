@@ -124,10 +124,10 @@ async function getWeather() {
 	if (res.status !== 200) {
 		weatherError.textContent = 'No data'
 		weatherIcon.className = 'weather-icon owf';
-		temperature.textContent = `----°C`;
-		weatherDescription.textContent = '----//----';
-		wind.textContent = `Wind speed: ---- m/s`;
-		humidity.textContent = `Humidity: ---- %`
+		temperature.textContent = null;
+		weatherDescription.textContent = null;
+		wind.textContent = null;
+		humidity.textContent = null;
 	} else {
 		const data = await res.json();
 		weatherError.textContent = null;

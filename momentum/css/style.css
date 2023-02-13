@@ -10,7 +10,7 @@
 }
 
 body {
-  min-width: 480px;
+  min-width: 320px;
   min-height: 100vh;
   font-family: 'Arial', sans-serif;
   font-size: 16px;
@@ -30,6 +30,7 @@ body {
   min-height: 220px;  
   padding: 20px;
 }
+
 
 .player-controls {
   display: flex;
@@ -337,14 +338,19 @@ body {
 	position: relative;
 }
 .quote {
-  min-height: 32px;
-	padding-bottom: 30px;
-	cursor: pointer;
+  /* min-height: 32px; */
+	padding-bottom: 10px;
+	/* cursor: pointer; */
 	z-index: 2;
 	opacity: 0.8;
 	transition: all 0.3s ease 0.1s;
 }
+.author {
+	font-size: 14px;
+	opacity: 0.8;
+}
 
+/* 
 .author {
 	cursor: pointer;
 	position: absolute;
@@ -371,7 +377,7 @@ body {
 	transform: translate( -50%, 0) scale(1.2);
 	opacity: 1;
 	top: 25px;
-}
+} */
 
 @media (max-width: 768px) {
   .time {
@@ -392,4 +398,85 @@ body {
     font-size: 32px;
     padding: 5px;
   }
+}
+
+@media (max-width: 498px) {
+	.header {
+		padding: 10px;
+	}
+	.main {
+		padding: 10px;
+		height: 30vh;
+		min-height: 0;
+	}
+	.footer {
+		padding: 10px;
+		min-height: 0;
+	}
+		
+	
+	.player {
+		width: 140px;
+		min-height: 160px;  
+		font-size: 12px;
+	}
+	.volume-icon,
+.player-icon,
+.slider-icon,
+.change-quote {
+  width: 28px;
+  height: 28px;
+  background-size: 28px 28px;  
+}
+	.weather {
+		align-items: flex-end;
+		width: 160px;
+		min-height: 160px;  
+		font-size: 14px;
+	}
+
+	.description-container {
+		column-gap: 8px;
+	}
+	
+	.weather-icon {
+		font-size: 32px;
+	}
+	
+	.city {
+		width: 120px;
+		font-size: 16px;
+	}
+	
+	.city::placeholder {  
+		font-size: 16px;
+	}
+
+	.time {
+    min-height: 60px;
+    font-size: 52px;    
+  }
+	.date {
+		Font-size: 20px;
+	}
+
+  .greeting-container {
+    min-height: 30px;
+    font-size: 20px;
+  }
+
+  .greeting {
+    padding: 3px;
+  }
+
+  .name {
+    font-size: 20px;
+    padding: 3px;
+  }
+	.quote{
+font-size: 14px;
+	}
+	.author {
+		font-size: 12px;
+	}
 }
