@@ -15,8 +15,24 @@
 		<div class="player">
 			<div class="player-controls">
 				<button class="play-prev player-icon"></button>
-				<button class="play player-icon"></button>
+				<button class="play play-pause player-icon"></button>
 				<button class="play-next player-icon"></button>
+				<div class="volume-container">
+					<div class="volume-button">
+						<div class="volume volume-icon icon-volume"></div>
+					</div>
+					<div class="volume-slider">
+						<div class="volume-percentage"></div>
+					</div>
+				</div>
+			</div>
+			<div class="timeline">
+				<div class="progress"></div>
+			</div>
+			<div class="audio-time">
+				<div class="current">--:--</div>
+				<div class="divider">/</div>
+				<div class="length">--:--</div>
 			</div>
 			<ul class="play-list"></ul>
 		</div>
@@ -51,7 +67,7 @@
 			<div class="author"></div>
 		</div>
 	</footer>
-	<script src="js/script.js"></script>
+	<script type="module" src="js/script.js"></script>
 </body>
 
 </html>

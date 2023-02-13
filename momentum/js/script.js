@@ -1,3 +1,4 @@
+import playList from './playList.js';
 
 // 1. Часы и календарь
 const timeEl = document.querySelector('.time');
@@ -63,7 +64,7 @@ const slideNext = document.querySelector('.slide-next');
 const slidePrev = document.querySelector('.slide-prev');
 
 function getRandom(min, max) {
-	return Math.floor(Math.random() * (max - min));
+	return Math.floor(Math.random() * (max - min) + min);
 }
 
 let bgNum = getRandom(1, 20);
@@ -166,7 +167,6 @@ window.addEventListener('load', getLocalStorageCity)
 city.addEventListener('change', setCity);
 
 // 5. Виджет "цитата дня"
-
 const quote = document.querySelector('.quote');
 const author = document.querySelector('.author');
 const changeQuote = document.querySelector('.change-quote');
@@ -194,3 +194,140 @@ async function writeQuote(res) {
 
 document.addEventListener('DOMContentLoaded', getQuote);
 changeQuote.addEventListener('click', getQuote);
+
+// 6. Аудиоплеер
+
+const playPauseBtn = document.querySelector('.play-pause');
+const playPrevBtn = document.querySelector('.play-prev');
+const playNextBtn = document.querySelector('.play-next');
+const playListContainer = document.querySelector('.play-list');
+
+let isPlay = false;
+let newVolume = 0.75;
+let playNum = 0;
+const audio = new Audio();
+
+function playAudio() {
+	changeActiveTrack();
+	if (!isPlay) {
+		audio.src = playList[playNum].src
+		audio.currentTime = 0;
+		audio.play();
+		isPlay = true;
+		playPauseBtn.classList.remove('play')
+		playPauseBtn.classList.add('pause')
+	} else {
+		audio.pause();
+		isPlay = false;
+		playPauseBtn.classList.remove('pause')
+		playPauseBtn.classList.add('play')
+	}
+}
+function playNext() {
+	isPlay = false;
+	if (playNum >= 3) {
+		playNum = 0;
+	} else {
+		playNum++;
+	}
+	playAudio();
+}
+function playPrev() {
+	isPlay = false;
+	if (playNum <= 0) {
+		playNum = 3;
+	} else {
+		playNum--;
+	}
+	playAudio();
+}
+
+function changeActiveTrack() {
+	const currentPlayList = document.querySelectorAll('.play-item')
+	currentPlayList.forEach((el, index) => {
+		if (index !== playNum) {
+			el.classList.remove('item-active')
+		} else {
+			el.classList.add('item-active')
+		}
+	})
+}
+
+playList.forEach(el => {
+	const li = document.createElement('li');
+	li.classList.add('play-item');
+	li.textContent = el.title;
+	playListContainer.append(li);
+})
+
+playPauseBtn.addEventListener('click', playAudio);
+playNextBtn.addEventListener('click', playNext);
+playPrevBtn.addEventListener('click', playPrev);
+// automatically play the next song at the end of the audio object's duration
+audio.addEventListener('ended', function () {
+	playNext();
+});
+
+// продвинутый плеер
+//click on timeline to skip around
+const timeline = document.querySelector(".timeline");
+timeline.addEventListener("click", e => {
+	const timelineWidth = window.getComputedStyle(timeline).width;
+	const timeToSeek = e.offsetX / parseInt(timelineWidth) * audio.duration;
+	audio.currentTime = timeToSeek;
+}, false);
+
+//check audio percentage and update time accordingly
+setInterval(() => {
+	const progressBar = document.querySelector(".progress");
+	progressBar.style.width = audio.currentTime / audio.duration * 100 + "%";
+	document.querySelector(".audio-time .current").textContent = getTimeCodeFromNum(
+		audio.currentTime
+	);
+}, 500);
+
+audio.addEventListener(
+	"loadeddata",
+	() => {
+		document.querySelector(".audio-time .length").textContent = getTimeCodeFromNum(
+			audio.duration
+		);
+		audio.volume = newVolume;
+	},
+	false
+);
+
+//turn 128 seconds into 2:08
+function getTimeCodeFromNum(num) {
+	let seconds = parseInt(num);
+	let minutes = parseInt(seconds / 60);
+	seconds -= minutes * 60;
+	const hours = parseInt(minutes / 60);
+	minutes -= hours * 60;
+	if (hours === 0) return `${minutes}:${String(seconds % 60).padStart(2, 0)}`;
+	return `${String(hours).padStart(2, 0)}:${minutes}:${String(
+		seconds % 60
+	).padStart(2, 0)}`;
+}
+
+// volume
+//click volume slider to change volume
+const volumeSlider = document.querySelector(".volume-slider");
+volumeSlider.addEventListener('click', e => {
+	const sliderWidth = window.getComputedStyle(volumeSlider).width;
+	newVolume = e.offsetX / parseInt(sliderWidth);
+	audio.volume = newVolume;
+	document.querySelector(".volume-percentage").style.width = newVolume * 100 + '%';
+}, false)
+
+document.querySelector(".volume-button").addEventListener("click", () => {
+	const volumeEl = document.querySelector(".volume");
+	audio.muted = !audio.muted;
+	if (audio.muted) {
+		volumeEl.classList.remove("icon-volume");
+		volumeEl.classList.add("icon-mute");
+	} else {
+		volumeEl.classList.add("icon-volume");
+		volumeEl.classList.remove("icon-mute");
+	}
+});
