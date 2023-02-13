@@ -100,3 +100,67 @@ function getSlidePrev() {
 
 slideNext.addEventListener('click', getSlideNext);
 slidePrev.addEventListener('click', getSlidePrev);
+
+// 4. Виджет погоды
+const weatherIcon = document.querySelector('.weather-icon');
+const temperature = document.querySelector('.temperature');
+const weatherDescription = document.querySelector('.weather-description');
+const city = document.querySelector('.city');
+const wind = document.querySelector('.wind');
+const humidity = document.querySelector('.humidity');
+const weatherError = document.querySelector('.weather-error');
+
+// api key from openweathermap.org
+const api_key = 'e1855b84a004bbbcc85c4a5708681819';
+
+let lang = 'en';
+let units = 'metric';
+
+async function getWeather() {
+	const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${lang}&appid=${api_key}&units=${units}`;
+
+	const res = await fetch(url);
+	if (res.status !== 200) {
+		weatherError.textContent = 'No data'
+		weatherIcon.className = 'weather-icon owf';
+		temperature.textContent = `----°C`;
+		weatherDescription.textContent = '----//----';
+		wind.textContent = `Wind speed: ---- m/s`;
+		humidity.textContent = `Humidity: ---- %`
+	} else {
+		const data = await res.json();
+		weatherError.textContent = null;
+		weatherIcon.className = 'weather-icon owf';
+		weatherIcon.classList.add(`owf-${data.weather[0].id}`);
+		temperature.textContent = `${Math.round(data.main.temp)}°C`;
+		weatherDescription.textContent = data.weather[0].description;
+		wind.textContent = `Wind speed: ${Math.round(data.wind.speed)} m/s`;
+		humidity.textContent = `Humidity: ${Math.round(data.main.humidity)}%`
+	}
+}
+
+function setCity() {
+	getWeather();
+	city.blur();
+}
+
+function setLocalStorageCity() {
+	localStorage.setItem('city', city.value)
+}
+window.addEventListener('beforeunload', setLocalStorageCity)
+
+function getLocalStorageCity() {
+	if (localStorage.getItem('city')) {
+		city.value = localStorage.getItem('city');
+		setCity()
+	} else {
+		city.value = 'Minsk';
+		setCity()
+	}
+}
+window.addEventListener('load', getLocalStorageCity)
+
+// первоначальная подгрузка данных
+// document.addEventListener('DOMContentLoaded', getWeather);
+// подгрузка данных при изменении города
+city.addEventListener('change', setCity);
