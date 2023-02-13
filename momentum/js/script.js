@@ -55,3 +55,48 @@ function getLocalStorage() {
 	}
 }
 window.addEventListener('load', getLocalStorage)
+
+
+// 3. Слайдер изображений
+const body = document.body;
+const slideNext = document.querySelector('.slide-next');
+const slidePrev = document.querySelector('.slide-prev');
+
+function getRandom(min, max) {
+	return Math.floor(Math.random() * (max - min));
+}
+
+let bgNum = getRandom(1, 20);
+
+function setBg() {
+	bgNum = bgNum.toString().padStart(2, "0");
+	const img = new Image();
+	const url = `https://raw.githubusercontent.com/dstrizhakov/momentum/assets/assets/img/backgrounds/${timeOfDay}/${bgNum}.webp`
+	img.src = url;
+	img.onload = () => {
+		body.style.backgroundImage = `url(${url})`;
+	}
+}
+
+setBg();
+
+function getSlideNext() {
+	if (bgNum >= 20) {
+		bgNum = 1;
+	} else {
+		bgNum++;
+	}
+	setBg();
+}
+
+function getSlidePrev() {
+	if (bgNum <= 1) {
+		bgNum = 20;
+	} else {
+		bgNum--;
+	}
+	setBg();
+}
+
+slideNext.addEventListener('click', getSlideNext);
+slidePrev.addEventListener('click', getSlidePrev);
