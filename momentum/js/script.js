@@ -164,3 +164,33 @@ window.addEventListener('load', getLocalStorageCity)
 // document.addEventListener('DOMContentLoaded', getWeather);
 // подгрузка данных при изменении города
 city.addEventListener('change', setCity);
+
+// 5. Виджет "цитата дня"
+
+const quote = document.querySelector('.quote');
+const author = document.querySelector('.author');
+const changeQuote = document.querySelector('.change-quote');
+
+async function getQuote() {
+	// const url = `https://type.fit/api/quotes`;
+	const path = './js/data.json';
+	const res = await fetch(path);
+	writeQuote(res);
+	// const res = await fetch(url);
+	// if (res.status === 200) {
+	// 	writeQuote(res)
+	// } else {
+	// 	const res = await fetch(path);
+	// 	writeQuote(res);
+	// }
+}
+
+async function writeQuote(res) {
+	const data = await res.json();
+	const quoteNum = getRandom(0, data.length)
+	quote.textContent = `"${data[quoteNum].text}"`;
+	author.textContent = data[quoteNum].author || 'Unknown author';
+}
+
+document.addEventListener('DOMContentLoaded', getQuote);
+changeQuote.addEventListener('click', getQuote);

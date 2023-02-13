@@ -246,7 +246,7 @@ body {
   justify-content: flex-end;
   align-items: center;
   width: 100%;
-  height: 30vh;
+  height: 25vh;
   min-height: 160px;  
   padding: 20px;
 }
@@ -255,13 +255,38 @@ body {
   margin-bottom: 30px;
   background-image: url("../assets/svg/reload.svg");  
 }
-
+.quote-container {
+	position: relative;
+}
 .quote {
   min-height: 32px;
+	margin-bottom: 30px;
+	cursor: pointer;
+	z-index: 2;
 }
 
 .author {
+	position: absolute;
+	z-index: 0;
+	opacity: 0;
+	visibility: hidden;
+	top: 0;
+	left: 50%;
+	font-size: 14px;
+	transform: translate( -50%, 0);
   min-height: 20px;
+	transition: all 0.3s ease 0.1s;
+}
+
+.quote:hover~.author {
+	visibility: visible;
+	opacity: 0.7;
+	top: 25px;
+}
+.author:hover {
+	visibility: visible;
+	opacity: 1;
+	top: 25px;
 }
 
 @media (max-width: 768px) {
