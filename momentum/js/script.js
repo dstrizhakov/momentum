@@ -26,7 +26,7 @@ let timeOfDay;
 
 const showGreeting = () => {
 	timeOfDay = getTimeOfDay();
-	greetingEl.textContent = `Good ${timeOfDay}`;
+	greetingEl.textContent = `Good ${timeOfDay},`;
 }
 
 const getTimeOfDay = () => {
@@ -38,3 +38,20 @@ const getTimeOfDay = () => {
 }
 
 showTime();
+
+//2. Приветствие
+// save name to local storage then beforeunload
+const nameEl = document.querySelector('.name');
+
+function setLocalStorage() {
+	localStorage.setItem('name', nameEl.value)
+}
+window.addEventListener('beforeunload', setLocalStorage)
+
+// read name from local storage then load
+function getLocalStorage() {
+	if (localStorage.getItem('name')) {
+		nameEl.value = localStorage.getItem('name');
+	}
+}
+window.addEventListener('load', getLocalStorage)
