@@ -417,3 +417,38 @@ document.querySelector(".volume-button").addEventListener("click", () => {
 	}
 });
 
+
+// Unsplash api
+
+const UNSPLASH_ACCESS_KEY = 'GQpboVLxSu8scxvDv9g3SOJtb4cEg3q9t5ekYwiivas';
+let orientation = 'landscape';
+let query = `${timeOfDay}`;
+let unsplashUrl = `https://api.unsplash.com/photos/random?orientation=${orientation}&query=${query}&client_id=${UNSPLASH_ACCESS_KEY}`;
+
+// Flickr api
+const FLICKR_ACCESS_KEY = 'aab5d760fc4401960005a1e08225e42a';
+const extras = 'url_h'
+let flickrUrl = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${FLICKR_ACCESS_KEY}&tags=${query}&extras=${extras}&format=json&nojsoncallback=1`
+
+
+async function getLinkToImage() {
+	const url = flickrUrl;
+	const res = await fetch(url);
+	console.log(res);
+	const data = await res.json();
+	console.log(data);
+	console.log(query)
+
+	// console.log(data.urls.regular);
+}
+getLinkToImage();
+
+
+// Settings modal toggle
+
+const settingsBtn = document.querySelector('.settings-button')
+const settingsModal = document.querySelector('.settings-modal')
+
+settingsBtn.addEventListener('click', () => {
+	settingsModal.classList.toggle('active');
+})
