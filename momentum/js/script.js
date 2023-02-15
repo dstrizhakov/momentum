@@ -1,5 +1,6 @@
 import playList from './playList.js';
 
+const body = document.body;
 const nameEl = document.querySelector('.name');
 // язык приложения
 
@@ -34,7 +35,7 @@ const translation = {
 		'placeholder': '[Введите имя]'
 	}
 };
-const changeLang = () => {
+const toggleLang = () => {
 	if (languageEl.textContent === 'EN') {
 		languageEl.textContent = 'RU';
 		language = 'ru';
@@ -47,7 +48,7 @@ const changeLang = () => {
 	getWeather();
 	setPlaceholder();
 }
-languageEl.addEventListener('click', changeLang);
+// languageEl.addEventListener('click', toggleLang);
 
 //save language to local storage before unload
 const saveSettings = () => {
@@ -77,6 +78,7 @@ let units = 'metric';
 const setPlaceholder = () => {
 	nameEl.setAttribute('placeholder', `${translation[language]['placeholder']}`)
 }
+
 
 
 // 1. Часы и календарь
@@ -124,8 +126,6 @@ showTime();
 //2. Приветствие
 // save name to local storage then beforeunload
 
-
-
 function setLocalStorage() {
 	localStorage.setItem('name', nameEl.value)
 }
@@ -140,10 +140,30 @@ function getLocalStorage() {
 window.addEventListener('load', getLocalStorage)
 
 
+
+
+const UNSPLASH_ACCESS_KEY = 'GQpboVLxSu8scxvDv9g3SOJtb4cEg3q9t5ekYwiivas';
+	let orientation = 'landscape';
+	let query = `${timeOfDay}`;
+
+// Flickr api
+const FLICKR_ACCESS_KEY = 'aab5d760fc4401960005a1e08225e42a';
+const extras = 'url_h'
+let flickrUrl = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${FLICKR_ACCESS_KEY}&tags=${query}&extras=${extras}&format=json&nojsoncallback=1`
+
+
+async function getLinkToImage() {
+	// Unsplash api//
+	let url = `https://api.unsplash.com/photos/random?orientation=${orientation}&query=${query}&client_id=${UNSPLASH_ACCESS_KEY}`;
+	const res = await fetch(url);
+	const data = await res.json();
+	return data.urls.regular
+}
+
 // 3. Слайдер изображений
-const body = document.body;
-const slideNext = document.querySelector('.slide-next');
-const slidePrev = document.querySelector('.slide-prev');
+
+// const slideNext = document.querySelector('.slide-next');
+// const slidePrev = document.querySelector('.slide-prev');
 
 function getRandom(min, max) {
 	return Math.floor(Math.random() * (max - min) + min);
@@ -151,10 +171,19 @@ function getRandom(min, max) {
 
 let bgNum = getRandom(1, 20);
 
-function setBg() {
-	bgNum = bgNum.toString().padStart(2, "0");
+let urlSourse = 'github';
+//urlSourse = 'unsplash';
+
+async function setBg() {
 	const img = new Image();
-	const url = `https://raw.githubusercontent.com/dstrizhakov/momentum/assets/assets/img/backgrounds/${timeOfDay}/${bgNum}.webp`
+	let url;
+	if (urlSourse === 'github') {
+		bgNum = bgNum.toString().padStart(2, "0");
+		url = `https://raw.githubusercontent.com/dstrizhakov/momentum/assets/assets/img/backgrounds/${timeOfDay}/${bgNum}.webp`
+	} else if (urlSourse === 'unsplash') {
+		url = await getLinkToImage();
+	}
+
 	img.src = url;
 	img.onload = () => {
 		body.style.backgroundImage = `url(${url})`;
@@ -181,8 +210,12 @@ function getSlidePrev() {
 	setBg();
 }
 
-slideNext.addEventListener('click', getSlideNext);
-slidePrev.addEventListener('click', getSlidePrev);
+// slideNext.addEventListener('click', getSlideNext);
+// slidePrev.addEventListener('click', getSlidePrev);
+
+
+
+
 
 // 4. Виджет погоды
 const weatherIcon = document.querySelector('.weather-icon');
@@ -279,13 +312,14 @@ async function writeQuote(res) {
 }
 
 document.addEventListener('DOMContentLoaded', getQuote);
-changeQuote.addEventListener('click', getQuote);
+
+// changeQuote.addEventListener('click', getQuote);
 
 // 6. Аудиоплеер
 
 const playPauseBtn = document.querySelector('.play-pause');
-const playPrevBtn = document.querySelector('.play-prev');
-const playNextBtn = document.querySelector('.play-next');
+// const playPrevBtn = document.querySelector('.play-prev');
+// const playNextBtn = document.querySelector('.play-next');
 const playListContainer = document.querySelector('.play-list');
 
 let isPlay = false;
@@ -346,9 +380,12 @@ playList.forEach(el => {
 	playListContainer.append(li);
 })
 
-playPauseBtn.addEventListener('click', playAudio);
-playNextBtn.addEventListener('click', playNext);
-playPrevBtn.addEventListener('click', playPrev);
+// const playPauseBtn = document.querySelector('.play-pause');
+// const playPrevBtn = document.querySelector('.play-prev');
+// const playNextBtn = document.querySelector('.play-next');
+// playPauseBtn.addEventListener('click', playAudio);
+// playNextBtn.addEventListener('click', playNext);
+// playPrevBtn.addEventListener('click', playPrev);
 
 // automatically play the next song at the end of the audio object's duration
 audio.addEventListener('ended', function () {
@@ -418,37 +455,81 @@ document.querySelector(".volume-button").addEventListener("click", () => {
 });
 
 
-// Unsplash api
 
-const UNSPLASH_ACCESS_KEY = 'GQpboVLxSu8scxvDv9g3SOJtb4cEg3q9t5ekYwiivas';
-let orientation = 'landscape';
-let query = `${timeOfDay}`;
-let unsplashUrl = `https://api.unsplash.com/photos/random?orientation=${orientation}&query=${query}&client_id=${UNSPLASH_ACCESS_KEY}`;
+//==================================================================
 
-// Flickr api
-const FLICKR_ACCESS_KEY = 'aab5d760fc4401960005a1e08225e42a';
-const extras = 'url_h'
-let flickrUrl = `https://www.flickr.com/services/rest/?method=flickr.photos.search&api_key=${FLICKR_ACCESS_KEY}&tags=${query}&extras=${extras}&format=json&nojsoncallback=1`
-
-
-async function getLinkToImage() {
-	const url = flickrUrl;
-	const res = await fetch(url);
-	console.log(res);
-	const data = await res.json();
-	console.log(data);
-	console.log(query)
-
-	// console.log(data.urls.regular);
-}
-getLinkToImage();
-
-
-// Settings modal toggle
-
-const settingsBtn = document.querySelector('.settings-button')
+// Settings
 const settingsModal = document.querySelector('.settings-modal')
 
-settingsBtn.addEventListener('click', () => {
+//==================================================================
+
+
+// ОБРАБОТКА ВСЕХ СОБЫТИЙ 'click' БУДЕТ ВЫПОЛНЯТЬСЯ ТУТ
+// чтобы разгрузить браузер будем использовать делегирование событий
+body.addEventListener('click', (event) => {
+	// обработка кнопки .settings-button
+if (event.target.closest('.settings-button')) {
 	settingsModal.classList.toggle('active');
+} else if (!event.target.closest('.settings-modal') && !event.target.closest('.language')) {
+	settingsModal.classList.remove('active');
+}
+// обработка кнопки .language
+if (event.target.closest('.language')) {
+	toggleLang();
+}
+// обработка кнопки .change-quote
+if (event.target.closest('.change-quote')) {
+	getQuote();
+}
+// обработка кнопки .slide-next
+if (event.target.closest('.slide-next')) {
+	getSlideNext();
+}
+// обработка кнопки .slide-prev
+if (event.target.closest('.slide-prev')) {
+	getSlidePrev();
+}
+// обработка кнопки .play-pause
+if (event.target.closest('.play-pause')) {
+	playAudio();
+}
+// обработка кнопки .play-prev
+if (event.target.closest('.play-prev')) {
+	playPrev();
+}
+// обработка кнопки .play-next
+if (event.target.closest('.play-next')) {
+	playNext();
+}
 })
+
+const checkAudioEl = document.getElementById('check-audio');
+const checkWeatherEl = document.getElementById('check-weather');
+const checkClockEl = document.getElementById('check-clock');
+const checkDateEl = document.getElementById('check-date');
+const checkWelcomeEl = document.getElementById('check-welcome');
+const checkQuotesEl = document.getElementById('check-quotes');
+
+
+
+
+function toggleHideClass (className, toggler) {
+	const element = document.querySelector(`.${className}`)
+	console.log(element, toggler)
+	if (toggler.checked === true) {
+		element.classList.remove('hidden')
+	} else {
+		element.classList.add('hidden')
+	}
+}
+
+checkAudioEl.addEventListener('click', () => {toggleHideClass('player', checkAudioEl)});
+checkWeatherEl.addEventListener('click', () => {toggleHideClass('weather', checkWeatherEl)});
+checkClockEl.addEventListener('click', () => {toggleHideClass('time', checkClockEl)});
+checkDateEl.addEventListener('click', () => {toggleHideClass('date', checkDateEl)});
+checkWelcomeEl.addEventListener('click', () => {toggleHideClass('greeting-container', checkWelcomeEl)});
+checkQuotesEl.addEventListener('click', () => {
+	toggleHideClass('change-quote', checkQuotesEl)
+	toggleHideClass('quote-container', checkQuotesEl)
+	
+});
