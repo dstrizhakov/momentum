@@ -1,5 +1,84 @@
 import playList from './playList.js';
 
+const nameEl = document.querySelector('.name');
+// язык приложения
+
+let language = 'en';
+const languageEl = document.querySelector('.language');
+
+const translation = {
+	'en': {
+		'night': 'Good night,',
+		'morning': 'Good morning,',
+		'afternoon': 'Good afternoon,',
+		'evening': 'Good evening,',
+		'option': 'en-US',
+		'units': 'metric',
+		'wind': 'Wind speed:',
+		'speed': 'm/s',
+		'humidity': 'Humidity:',
+		'city': 'Minsk',
+		'placeholder': '[Enter name]'
+	},
+	'ru': {
+		'night': 'Доброй ночи,',
+		'morning': 'Доброе утро,',
+		'afternoon': 'Добрый день,',
+		'evening': 'Добрый вечер,',
+		'option': 'ru-RU',
+		'units': 'metric',
+		'wind': 'Скорость ветра:',
+		'speed': 'м/с',
+		'humidity': 'Влажность:',
+		'city': 'Минск',
+		'placeholder': '[Введите имя]'
+	}
+};
+const changeLang = () => {
+	if (languageEl.textContent === 'EN') {
+		languageEl.textContent = 'RU';
+		language = 'ru';
+	} else {
+		languageEl.textContent = 'EN';
+		language = 'en';
+	}
+	getQuote();
+	showTime();
+	getWeather();
+	setPlaceholder();
+}
+languageEl.addEventListener('click', changeLang);
+
+//save language to local storage before unload
+const saveSettings = () => {
+	localStorage.setItem('language', languageEl.textContent)
+}
+window.addEventListener('beforeunload', saveSettings)
+
+//restore language from local storage after load
+const loadSettings = () => {
+	let langFromStorage = localStorage.getItem('language');
+	if (langFromStorage) {
+		language = langFromStorage.toLowerCase();
+		languageEl.textContent = langFromStorage
+		getQuote();
+	} else {
+		language = 'en';
+		languageEl.textContent = "EN";
+	}
+	setPlaceholder();
+}
+window.addEventListener('load', loadSettings)
+
+// let units = translation[language]['units'];
+let units = 'metric';
+// Начальная инициализация приложени на основе настроек
+
+const setPlaceholder = () => {
+	nameEl.setAttribute('placeholder', `${translation[language]['placeholder']}`)
+}
+
+
 // 1. Часы и календарь
 const timeEl = document.querySelector('.time');
 const dateEl = document.querySelector('.date');
@@ -20,14 +99,16 @@ const showDate = () => {
 		month: "long",
 		day: "numeric",
 	};
-	const currentDate = date.toLocaleDateString('en-US', options);
+
+	const currentDate = date.toLocaleDateString(translation[language]['option'], options);
 	dateEl.textContent = `${currentDate}`;
 }
 let timeOfDay;
 
 const showGreeting = () => {
 	timeOfDay = getTimeOfDay();
-	greetingEl.textContent = `Good ${timeOfDay},`;
+	let greetingText = translation[language][timeOfDay];
+	greetingEl.textContent = greetingText;
 }
 
 const getTimeOfDay = () => {
@@ -42,7 +123,8 @@ showTime();
 
 //2. Приветствие
 // save name to local storage then beforeunload
-const nameEl = document.querySelector('.name');
+
+
 
 function setLocalStorage() {
 	localStorage.setItem('name', nameEl.value)
@@ -114,11 +196,9 @@ const weatherError = document.querySelector('.weather-error');
 // api key from openweathermap.org
 const api_key = 'e1855b84a004bbbcc85c4a5708681819';
 
-let lang = 'en';
-let units = 'metric';
 
 async function getWeather() {
-	const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${lang}&appid=${api_key}&units=${units}`;
+	const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${language}&appid=${api_key}&units=${units}`;
 
 	const res = await fetch(url);
 	if (res.status !== 200) {
@@ -135,10 +215,12 @@ async function getWeather() {
 		weatherIcon.classList.add(`owf-${data.weather[0].id}`);
 		temperature.textContent = `${Math.round(data.main.temp)}°C`;
 		weatherDescription.textContent = data.weather[0].description;
-		wind.textContent = `Wind speed: ${Math.round(data.wind.speed)} m/s`;
-		humidity.textContent = `Humidity: ${Math.round(data.main.humidity)}%`
+		wind.textContent = `${translation[language]['wind']} ${Math.round(data.wind.speed)} ${translation[language]['speed']}`;
+		humidity.textContent = `${translation[language]['humidity']} ${Math.round(data.main.humidity)}%`
 	}
 }
+
+
 
 function setCity() {
 	getWeather();
@@ -153,11 +235,10 @@ window.addEventListener('beforeunload', setLocalStorageCity)
 function getLocalStorageCity() {
 	if (localStorage.getItem('city')) {
 		city.value = localStorage.getItem('city');
-		setCity()
 	} else {
-		city.value = 'Minsk';
-		setCity()
+		city.value = translation[language]['city'];
 	}
+	setCity()
 }
 window.addEventListener('load', getLocalStorageCity)
 
@@ -167,8 +248,8 @@ window.addEventListener('load', getLocalStorageCity)
 city.addEventListener('change', setCity);
 
 // 5. Виджет "цитата дня"
-const quote = document.querySelector('.quote');
-const author = document.querySelector('.author');
+const quoteEl = document.querySelector('.quote');
+const authorEl = document.querySelector('.author');
 const changeQuote = document.querySelector('.change-quote');
 
 async function getQuote() {
@@ -187,9 +268,14 @@ async function getQuote() {
 
 async function writeQuote(res) {
 	const data = await res.json();
-	const quoteNum = getRandom(0, data.length)
-	quote.textContent = `"${data[quoteNum].text}"`;
-	author.textContent = data[quoteNum].author || 'Unknown author';
+	const quoteNum = getRandom(0, data.length);
+	let quote = data[quoteNum][language];
+	quoteEl.textContent = `"${quote}"`;
+	if (language === 'ru') {
+		authorEl.textContent = data[quoteNum].authorRu || 'Неизвестный автор';
+	} else {
+		authorEl.textContent = data[quoteNum].authorEn || 'Unknown author';
+	}
 }
 
 document.addEventListener('DOMContentLoaded', getQuote);
@@ -263,6 +349,7 @@ playList.forEach(el => {
 playPauseBtn.addEventListener('click', playAudio);
 playNextBtn.addEventListener('click', playNext);
 playPrevBtn.addEventListener('click', playPrev);
+
 // automatically play the next song at the end of the audio object's duration
 audio.addEventListener('ended', function () {
 	playNext();
@@ -305,9 +392,7 @@ function getTimeCodeFromNum(num) {
 	const hours = parseInt(minutes / 60);
 	minutes -= hours * 60;
 	if (hours === 0) return `${minutes}:${String(seconds % 60).padStart(2, 0)}`;
-	return `${String(hours).padStart(2, 0)}:${minutes}:${String(
-		seconds % 60
-	).padStart(2, 0)}`;
+	return `${String(hours).padStart(2, 0)}:${minutes}:${String(seconds % 60).padStart(2, 0)}`;
 }
 
 // volume
@@ -331,3 +416,4 @@ document.querySelector(".volume-button").addEventListener("click", () => {
 		volumeEl.classList.remove("icon-mute");
 	}
 });
+
