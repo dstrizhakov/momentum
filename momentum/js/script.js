@@ -48,36 +48,10 @@ const toggleLang = () => {
 	getWeather();
 	setPlaceholder();
 }
-// languageEl.addEventListener('click', toggleLang);
 
-//save language to local storage before unload
-const saveSettings = () => {
-	localStorage.setItem('language', languageEl.textContent)
-}
-window.addEventListener('beforeunload', saveSettings)
-
-//restore language from local storage after load
-const loadSettings = () => {
-	let langFromStorage = localStorage.getItem('language');
-	if (langFromStorage) {
-		language = langFromStorage.toLowerCase();
-		languageEl.textContent = langFromStorage
-		getQuote();
-	} else {
-		language = 'en';
-		languageEl.textContent = "EN";
-	}
-	setPlaceholder();
-}
-window.addEventListener('load', loadSettings)
-
-// let units = translation[language]['units'];
 let units = 'metric';
 // Начальная инициализация приложени на основе настроек
 
-const setPlaceholder = () => {
-	nameEl.setAttribute('placeholder', `${translation[language]['placeholder']}`)
-}
 
 
 
@@ -123,25 +97,17 @@ const getTimeOfDay = () => {
 
 showTime();
 
+
+//==================================================================
 //2. Приветствие
-// save name to local storage then beforeunload
+//==================================================================
 
-function setLocalStorage() {
-	localStorage.setItem('name', nameEl.value)
+const setPlaceholder = () => {
+	nameEl.setAttribute('placeholder', `${translation[language]['placeholder']}`)
 }
-window.addEventListener('beforeunload', setLocalStorage)
-
-// read name from local storage then load
-function getLocalStorage() {
-	if (localStorage.getItem('name')) {
-		nameEl.value = localStorage.getItem('name');
-	}
-}
-window.addEventListener('load', getLocalStorage)
-
-
-
-
+//==================================================================
+// API фоновых изображений
+//==================================================================
 const UNSPLASH_ACCESS_KEY = 'GQpboVLxSu8scxvDv9g3SOJtb4cEg3q9t5ekYwiivas';
 	let orientation = 'landscape';
 	let query = `${timeOfDay}`;
@@ -160,10 +126,9 @@ async function getLinkToImage() {
 	return data.urls.regular
 }
 
+//==================================================================
 // 3. Слайдер изображений
-
-// const slideNext = document.querySelector('.slide-next');
-// const slidePrev = document.querySelector('.slide-prev');
+//==================================================================
 
 function getRandom(min, max) {
 	return Math.floor(Math.random() * (max - min) + min);
@@ -172,7 +137,7 @@ function getRandom(min, max) {
 let bgNum = getRandom(1, 20);
 
 let urlSourse = 'github';
-//urlSourse = 'unsplash';
+urlSourse = 'unsplash';
 
 async function setBg() {
 	const img = new Image();
@@ -210,14 +175,9 @@ function getSlidePrev() {
 	setBg();
 }
 
-// slideNext.addEventListener('click', getSlideNext);
-// slidePrev.addEventListener('click', getSlidePrev);
-
-
-
-
-
+//==================================================================
 // 4. Виджет погоды
+//==================================================================
 const weatherIcon = document.querySelector('.weather-icon');
 const temperature = document.querySelector('.temperature');
 const weatherDescription = document.querySelector('.weather-description');
@@ -228,7 +188,6 @@ const weatherError = document.querySelector('.weather-error');
 
 // api key from openweathermap.org
 const api_key = 'e1855b84a004bbbcc85c4a5708681819';
-
 
 async function getWeather() {
 	const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${language}&appid=${api_key}&units=${units}`;
@@ -253,37 +212,22 @@ async function getWeather() {
 	}
 }
 
-
-
 function setCity() {
 	getWeather();
 	city.blur();
 }
 
-function setLocalStorageCity() {
-	localStorage.setItem('city', city.value)
-}
-window.addEventListener('beforeunload', setLocalStorageCity)
-
-function getLocalStorageCity() {
-	if (localStorage.getItem('city')) {
-		city.value = localStorage.getItem('city');
-	} else {
-		city.value = translation[language]['city'];
-	}
-	setCity()
-}
-window.addEventListener('load', getLocalStorageCity)
 
 // первоначальная подгрузка данных
 // document.addEventListener('DOMContentLoaded', getWeather);
 // подгрузка данных при изменении города
 city.addEventListener('change', setCity);
 
+//==================================================================
 // 5. Виджет "цитата дня"
+//==================================================================
 const quoteEl = document.querySelector('.quote');
 const authorEl = document.querySelector('.author');
-const changeQuote = document.querySelector('.change-quote');
 
 async function getQuote() {
 	// const url = `https://type.fit/api/quotes`;
@@ -313,10 +257,9 @@ async function writeQuote(res) {
 
 document.addEventListener('DOMContentLoaded', getQuote);
 
-// changeQuote.addEventListener('click', getQuote);
-
+//==================================================================
 // 6. Аудиоплеер
-
+//==================================================================
 const playPauseBtn = document.querySelector('.play-pause');
 // const playPrevBtn = document.querySelector('.play-prev');
 // const playNextBtn = document.querySelector('.play-next');
@@ -457,15 +400,110 @@ document.querySelector(".volume-button").addEventListener("click", () => {
 
 
 //==================================================================
-
 // Settings
+//==================================================================
 const settingsModal = document.querySelector('.settings-modal')
+// toggle elements
+const checkAudioEl = document.getElementById('check-audio');
+const checkWeatherEl = document.getElementById('check-weather');
+const checkClockEl = document.getElementById('check-clock');
+const checkDateEl = document.getElementById('check-date');
+const checkWelcomeEl = document.getElementById('check-welcome');
+const checkQuotesEl = document.getElementById('check-quotes');
 
+function toggleHideClass (className, toggler) {
+	const element = document.querySelector(`.${className}`)
+	if (toggler.checked === true) {
+		element.classList.remove('hidden')
+	} else {
+		element.classList.add('hidden')
+	}
+}
+
+checkAudioEl.addEventListener('click', () => {
+	toggleHideClass('player', checkAudioEl)
+	audio.pause();
+	isPlay = false;
+});
+checkWeatherEl.addEventListener('click', () => {toggleHideClass('weather', checkWeatherEl)});
+checkClockEl.addEventListener('click', () => {toggleHideClass('time', checkClockEl)});
+checkDateEl.addEventListener('click', () => {toggleHideClass('date', checkDateEl)});
+checkWelcomeEl.addEventListener('click', () => {toggleHideClass('greeting-container', checkWelcomeEl)});
+checkQuotesEl.addEventListener('click', () => {
+	toggleHideClass('change-quote', checkQuotesEl)
+	toggleHideClass('quote-container', checkQuotesEl)	
+});
+//==================================================================
+// save and restore settings from Local Storage
 //==================================================================
 
+function setLocalStorage() {
+	localStorage.setItem('name', nameEl.value)
+	localStorage.setItem('city', city.value)
+	localStorage.setItem('language', languageEl.textContent)
+	localStorage.setItem('player', checkAudioEl.checked)
+	localStorage.setItem('weather', checkWeatherEl.checked)
+	localStorage.setItem('clock', checkClockEl.checked)
+	localStorage.setItem('date', checkDateEl.checked)
+	localStorage.setItem('welcome', checkWelcomeEl.checked)
+	localStorage.setItem('quotes', checkQuotesEl.checked)
+}
+window.addEventListener('beforeunload', setLocalStorage)
 
-// ОБРАБОТКА ВСЕХ СОБЫТИЙ 'click' БУДЕТ ВЫПОЛНЯТЬСЯ ТУТ
+// read name from local storage then load
+function getLocalStorage() {
+	if (localStorage.getItem('name')) {
+		nameEl.value = localStorage.getItem('name');
+	}
+	if (localStorage.getItem('city')) {
+		city.value = localStorage.getItem('city');
+	} else {
+		city.value = translation[language]['city'];
+	}
+	setCity()
+	let langFromStorage = localStorage.getItem('language');
+	if (langFromStorage) {
+		language = langFromStorage.toLowerCase();
+		languageEl.textContent = langFromStorage
+		getQuote();
+	} else {
+		language = 'en';
+		languageEl.textContent = "EN";
+	}
+	setPlaceholder();
+	// recall settings
+	if (localStorage.getItem('player') === 'false'){
+		checkAudioEl.removeAttribute('checked')
+		toggleHideClass('player', checkAudioEl)
+	}
+	if (localStorage.getItem('weather') === 'false'){
+		checkWeatherEl.removeAttribute('checked')
+		toggleHideClass('weather', checkWeatherEl)
+	}
+	if (localStorage.getItem('clock') === 'false'){
+		checkClockEl.removeAttribute('checked')
+		toggleHideClass('time', checkClockEl)
+	}
+	if (localStorage.getItem('date') === 'false'){
+		checkDateEl.removeAttribute('checked')
+		toggleHideClass('date', checkDateEl)
+	}
+	if (localStorage.getItem('welcome') === 'false'){
+		checkWelcomeEl.removeAttribute('checked')
+		toggleHideClass('greeting-container', checkWelcomeEl)
+	}
+	if (localStorage.getItem('quotes') === 'false'){
+		checkQuotesEl.removeAttribute('checked')
+		toggleHideClass('change-quote', checkQuotesEl)
+		toggleHideClass('quote-container', checkQuotesEl)	
+	}
+}
+window.addEventListener('load', getLocalStorage)
+
+
+//==================================================================
 // чтобы разгрузить браузер будем использовать делегирование событий
+//==================================================================
 body.addEventListener('click', (event) => {
 	// обработка кнопки .settings-button
 if (event.target.closest('.settings-button')) {
@@ -503,33 +541,3 @@ if (event.target.closest('.play-next')) {
 }
 })
 
-const checkAudioEl = document.getElementById('check-audio');
-const checkWeatherEl = document.getElementById('check-weather');
-const checkClockEl = document.getElementById('check-clock');
-const checkDateEl = document.getElementById('check-date');
-const checkWelcomeEl = document.getElementById('check-welcome');
-const checkQuotesEl = document.getElementById('check-quotes');
-
-
-
-
-function toggleHideClass (className, toggler) {
-	const element = document.querySelector(`.${className}`)
-	console.log(element, toggler)
-	if (toggler.checked === true) {
-		element.classList.remove('hidden')
-	} else {
-		element.classList.add('hidden')
-	}
-}
-
-checkAudioEl.addEventListener('click', () => {toggleHideClass('player', checkAudioEl)});
-checkWeatherEl.addEventListener('click', () => {toggleHideClass('weather', checkWeatherEl)});
-checkClockEl.addEventListener('click', () => {toggleHideClass('time', checkClockEl)});
-checkDateEl.addEventListener('click', () => {toggleHideClass('date', checkDateEl)});
-checkWelcomeEl.addEventListener('click', () => {toggleHideClass('greeting-container', checkWelcomeEl)});
-checkQuotesEl.addEventListener('click', () => {
-	toggleHideClass('change-quote', checkQuotesEl)
-	toggleHideClass('quote-container', checkQuotesEl)
-	
-});
