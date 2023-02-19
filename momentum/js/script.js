@@ -1,12 +1,41 @@
 import playList from "./playList.js";
-
+//==================================================================
+//получение элементов
+//==================================================================
 const body = document.body;
 const nameEl = document.querySelector(".name");
-
-// язык приложения
-
-let language = "en";
 const languageEl = document.querySelector(".language");
+const timeEl = document.querySelector(".time");
+const dateEl = document.querySelector(".date");
+const greetingEl = document.querySelector(".greeting");
+const weatherIcon = document.querySelector(".weather-icon");
+const temperature = document.querySelector(".temperature");
+const weatherDescription = document.querySelector(".weather-description");
+const city = document.querySelector(".city");
+const wind = document.querySelector(".wind");
+const humidity = document.querySelector(".humidity");
+const weatherError = document.querySelector(".weather-error");
+const quoteEl = document.querySelector(".quote");
+const authorEl = document.querySelector(".author");
+const playPauseBtn = document.querySelector(".play-pause");
+const playListContainer = document.querySelector(".play-list");
+const settingsModal = document.querySelector(".settings-modal");
+const checkAudioEl = document.getElementById("check-audio");
+const checkWeatherEl = document.getElementById("check-weather");
+const checkClockEl = document.getElementById("check-clock");
+const checkDateEl = document.getElementById("check-date");
+const checkWelcomeEl = document.getElementById("check-welcome");
+const checkQuotesEl = document.getElementById("check-quotes");
+const radioGroup = document.querySelector(".form_radio_group");
+const radioButtons = radioGroup.querySelectorAll('input[type="radio"]');
+const tagsInput = document.querySelector(".settings-tags");
+const tagsUpdate = document.querySelector(".settings-update");
+
+//==================================================================
+// язык приложения
+//==================================================================
+let language = "en";
+let units = "metric";
 
 const translation = {
   en: {
@@ -52,6 +81,7 @@ const translation = {
     background: "Источник фонов:",
   },
 };
+
 const toggleLang = () => {
   if (languageEl.textContent === "EN") {
     languageEl.textContent = "RU";
@@ -67,12 +97,9 @@ const toggleLang = () => {
   setSettingsLanuage();
 };
 
-let units = "metric";
-
+//==================================================================
 // 1. Часы и календарь
-const timeEl = document.querySelector(".time");
-const dateEl = document.querySelector(".date");
-const greetingEl = document.querySelector(".greeting");
+//==================================================================
 
 const showTime = () => {
   const date = new Date();
@@ -121,9 +148,11 @@ showTime();
 const setPlaceholder = () => {
   nameEl.setAttribute("placeholder", `${translation[language]["placeholder"]}`);
 };
+
 //==================================================================
 // API фоновых изображений
 //==================================================================
+
 const UNSPLASH_ACCESS_KEY = "GQpboVLxSu8scxvDv9g3SOJtb4cEg3q9t5ekYwiivas";
 let orientation = "landscape";
 let query = `${timeOfDay}`;
@@ -153,14 +182,13 @@ async function getLinkToImage() {
 // 3. Слайдер изображений
 //==================================================================
 
-function getRandom(min, max) {
-  return Math.floor(Math.random() * (max - min) + min);
-}
-
 let bgNum = getRandom(1, 20);
 
 let urlSourse = "github";
-// urlSourse = "unsplash";
+
+function getRandom(min, max) {
+  return Math.floor(Math.random() * (max - min) + min);
+}
 
 async function setBg() {
   const img = new Image();
@@ -177,7 +205,7 @@ async function setBg() {
   };
 }
 
-setBg();
+// setBg();
 
 function getSlideNext() {
   if (bgNum >= 20) {
@@ -200,20 +228,12 @@ function getSlidePrev() {
 //==================================================================
 // 4. Виджет погоды
 //==================================================================
-const weatherIcon = document.querySelector(".weather-icon");
-const temperature = document.querySelector(".temperature");
-const weatherDescription = document.querySelector(".weather-description");
-const city = document.querySelector(".city");
-const wind = document.querySelector(".wind");
-const humidity = document.querySelector(".humidity");
-const weatherError = document.querySelector(".weather-error");
 
 // api key from openweathermap.org
 const api_key = "e1855b84a004bbbcc85c4a5708681819";
 
 async function getWeather() {
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${city.value}&lang=${language}&appid=${api_key}&units=${units}`;
-
   const res = await fetch(url);
   if (res.status !== 200) {
     weatherError.textContent = "No data";
@@ -243,29 +263,17 @@ function setCity() {
   city.blur();
 }
 
-// первоначальная подгрузка данных
-// document.addEventListener('DOMContentLoaded', getWeather);
 // подгрузка данных при изменении города
 city.addEventListener("change", setCity);
 
 //==================================================================
 // 5. Виджет "цитата дня"
 //==================================================================
-const quoteEl = document.querySelector(".quote");
-const authorEl = document.querySelector(".author");
 
 async function getQuote() {
-  // const url = `https://type.fit/api/quotes`;
   const path = "./js/data.json";
   const res = await fetch(path);
   writeQuote(res);
-  // const res = await fetch(url);
-  // if (res.status === 200) {
-  // 	writeQuote(res)
-  // } else {
-  // 	const res = await fetch(path);
-  // 	writeQuote(res);
-  // }
 }
 
 async function writeQuote(res) {
@@ -285,10 +293,6 @@ document.addEventListener("DOMContentLoaded", getQuote);
 //==================================================================
 // 6. Аудиоплеер
 //==================================================================
-const playPauseBtn = document.querySelector(".play-pause");
-// const playPrevBtn = document.querySelector('.play-prev');
-// const playNextBtn = document.querySelector('.play-next');
-const playListContainer = document.querySelector(".play-list");
 
 let isPlay = false;
 let newVolume = 0.75;
@@ -347,13 +351,6 @@ playList.forEach((el) => {
   li.textContent = el.title;
   playListContainer.append(li);
 });
-
-// const playPauseBtn = document.querySelector('.play-pause');
-// const playPrevBtn = document.querySelector('.play-prev');
-// const playNextBtn = document.querySelector('.play-next');
-// playPauseBtn.addEventListener('click', playAudio);
-// playNextBtn.addEventListener('click', playNext);
-// playPrevBtn.addEventListener('click', playPrev);
 
 // automatically play the next song at the end of the audio object's duration
 audio.addEventListener("ended", function () {
@@ -434,14 +431,6 @@ document.querySelector(".volume-button").addEventListener("click", () => {
 //==================================================================
 // Settings
 //==================================================================
-const settingsModal = document.querySelector(".settings-modal");
-// toggle elements
-const checkAudioEl = document.getElementById("check-audio");
-const checkWeatherEl = document.getElementById("check-weather");
-const checkClockEl = document.getElementById("check-clock");
-const checkDateEl = document.getElementById("check-date");
-const checkWelcomeEl = document.getElementById("check-welcome");
-const checkQuotesEl = document.getElementById("check-quotes");
 
 function toggleHideClass(className, toggler) {
   const element = document.querySelector(`.${className}`);
@@ -473,6 +462,7 @@ checkQuotesEl.addEventListener("click", () => {
   toggleHideClass("change-quote", checkQuotesEl);
   toggleHideClass("quote-container", checkQuotesEl);
 });
+
 //==================================================================
 // save and restore settings from Local Storage
 //==================================================================
@@ -552,7 +542,9 @@ window.addEventListener("load", getLocalStorage);
 
 //==================================================================
 // чтобы разгрузить браузер будем использовать делегирование событий
+// и обрабатывать все события click в одном слушателе
 //==================================================================
+
 body.addEventListener("click", (event) => {
   // обработка кнопки .settings-button
   if (event.target.closest(".settings-button")) {
@@ -591,11 +583,15 @@ body.addEventListener("click", (event) => {
   if (event.target.closest(".play-next")) {
     playNext();
   }
+  // обработка кнопки .settings-update
+  if (event.target.closest(".settings-update")) {
+    updateTags();
+  }
 });
 
-// select urlSourse for background
-const radioGroup = document.querySelector(".form_radio_group");
-const radioButtons = radioGroup.querySelectorAll('input[type="radio"]');
+//==================================================================
+// Обработка радио-кнопок выбор api фоновых изображений
+//==================================================================
 
 function readRadio() {
   const selected = radioGroup.querySelector(
@@ -630,7 +626,6 @@ function restoreSettingUrl(urlSourse) {
 }
 
 radioGroup.addEventListener("change", readRadio);
-// =================================== //
 
 function setSettingsLanuage() {
   document.querySelector(".settings-title").textContent =
@@ -653,10 +648,10 @@ function setSettingsLanuage() {
 
 setSettingsLanuage();
 
+//==================================================================
+// Обработка тегов для api фоновых изображений
+//==================================================================
 let tags = "";
-// settings tags
-const tagsInput = document.querySelector(".settings-tags");
-const tagsUpdate = document.querySelector(".settings-update");
 
 function updateTags() {
   if (tagsInput.value.trim()) {
@@ -671,10 +666,14 @@ function updateTags() {
   }
 }
 
-tagsUpdate.addEventListener("click", updateTags);
-
 function recallTags() {
   let currentTags = localStorage.getItem("tags");
   tagsInput.value = currentTags;
   query = currentTags;
 }
+
+// первоначальная подгрузка данных
+// document.addEventListener("DOMContentLoaded", renderAll());
+// function renderAll() {
+//   showTime();
+// }
