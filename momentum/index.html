@@ -73,56 +73,62 @@
 				<form action="#">
 					<ul id="settings-modules" class="settings-modules">
 						<li class="settings-module">
-							<p>Аудиоплеер</p>
+							<p class="settings-module-player">Аудиоплеер</p>
 							<input checked type="checkbox" class="checkbox" id="check-audio">
 							<label for="check-audio"></label> 
 						</li>
 						<li class="settings-module">
-							<p>Погода</p>
+							<p class="settings-module-weather">Погода</p>
 							<input checked type="checkbox" class="checkbox" id="check-weather">
 							<label for="check-weather"></label> 
 						</li>
 						<li class="settings-module">
-							<p>Часы</p>
+							<p class="settings-module-clock">Часы</p>
 							<input checked type="checkbox" class="checkbox" id="check-clock">
 							<label for="check-clock"></label> 
 						</li>
 						<li class="settings-module">
-							<p>Дата</p>
+							<p class="settings-module-date">Дата</p>
 							<input checked type="checkbox" class="checkbox" id="check-date">
 							<label for="check-date"></label> 
 						</li>
 						<li class="settings-module">
-							<p>Приветствие</p>
+							<p class="settings-module-welcome">Приветствие</p>
 							<input checked type="checkbox" class="checkbox" id="check-welcome">
 							<label for="check-welcome"></label> 
 						</li>
 						<li class="settings-module">
-							<p>Цитата</p>
+							<p class="settings-module-quotes">Цитата</p>
 							<input checked type="checkbox" class="checkbox" id="check-quotes">
 							<label for="check-quotes"></label> 
 						</li>
+						<li class="settings-background">
+							<p class="settings-module-background">Источник фонов</p>
+							<div class="form_radio_group">
+								<div class="form_radio_group-item">
+									<input id="Github" type="radio" name="background" value="github" checked>
+									<label for="Github">Github</label>
+								</div>
+								<div class="form_radio_group-item">
+									<input id="Unsplash" type="radio" name="background" value="unsplash">
+									<label for="Unsplash">Unsplash</label>
+								</div>
+								<div class="form_radio_group-item">
+									<input id="Flickr" type="radio" name="background" value="flickr">
+									<label for="Flickr">Flickr</label>
+								</div>
+							</div>
+						</li>
+						<li class="settings-module">
+							<div class="settings-input">
+								<input class="settings-tags" type="text">
+								<div class="settings-update">
+									<img src="/assets/svg/reload.svg" alt="reload">
+								</div>
+							</div>
+						</li>
 					</ul>
-				</form>
-				<!-- <div class="settings-background">
-					<span>Источник фонов</span>
-					<div class="settings-api">
-						<p>
-							<input checked type="radio" id="github" name="api" value="github">
-							<label for="github">Github</label>
-						</p>
-						<p>
-							<input type="radio" id="unsplash" name="api" value="unsplash">
-						<label for="unsplash">Unsplash</label>
-						</p>
-						<p>
-							<input type="radio" id="flickr" name="api" value="flickr">
-						<label for="flickr">Flickr</label>
-					</p>
-						
-					</div>
-				</div> -->
-				
+				</form>	
 			</div>
 			<div class="settings">
 				<div class="settings-button">

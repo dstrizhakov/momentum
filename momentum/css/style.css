@@ -509,7 +509,7 @@ transition: all 0.3s ease 0s;
 	transform: translate(0, 0);
 }
 .settings-title {
-	padding: 8px;
+margin-bottom: 8px;
 	font-weight: 400;
 }
 .settings-modal::before {
@@ -524,17 +524,9 @@ transition: all 0.3s ease 0s;
 	left: 16px;
 }
 .settings-background {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	box-shadow:inset 0px 0px 20px rgba(0, 0, 0, 0.1);
+	display: block;
 	padding: 5px;
 	border-radius: 5px;
-}
-.settings-api {
-display: flex;
-flex-direction: column;
-align-items: start;
 }
 
 .checkbox {
@@ -582,6 +574,93 @@ align-items: start;
 	display: flex;
 	justify-content: space-between;
 	border-bottom: 1px solid #e0e0e0;
+}
+/* RADIO BUTTONS SELECT BACKGROUND */
+
+.form_radio_group {
+	display: inline-flex;
+	overflow: hidden;
+}
+.form_radio_group-item {
+	padding-top: 5px;
+	/* display: inline-flex;
+	float: left;     */
+}
+.form_radio_group input[type=radio] {
+	display: none;
+}
+.form_radio_group label {
+	display: inline-block;
+	cursor: pointer;
+	padding: 0px 10px;
+	line-height: 34px;
+	border: 1px solid #cdd1da;
+	border-right: none;
+	user-select: none;
+	background: #e3e3e4;
+	transition: all 0.3s ease 0s;
+}
+ 
+.form_radio_group .form_radio_group-item:first-child label {
+	border-radius: 6px 0 0 6px;
+}
+.form_radio_group .form_radio_group-item:last-child label {
+	border-radius: 0 6px 6px 0;
+	border-right: 1px solid #cdd1da;
+}
+ 
+/* Checked */
+.form_radio_group input[type=radio]:checked + label {
+	background: #ff5722;
+	color: #ffffff;
+}
+ 
+/* Hover */
+.form_radio_group label:hover {
+	color: #666;
+}
+ 
+/* Disabled */
+.form_radio_group input[type=radio]:disabled + label {
+	background: #cdd1da;
+	color: #666;
+}
+/* =============================== */
+.settings-input {
+display: flex;
+align-items: center;
+justify-content: space-between;
+width: 100%;
+border-radius: 5px;
+border: 1px solid #cdd1da;
+}
+.settings-tags {
+	width: 100%;
+	padding: 8px;
+	border: none;
+	border-radius: 5px 0px 0px 5px;
+}
+.settings-tags:disabled {
+	background-color: #dedede;
+}
+.settings-tags:disabled + .settings-update{
+	cursor: not-allowed;
+}
+.settings-update {
+	padding: 0 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+.settings-update img {
+	height: 18px;
+	filter: invert(1);
+	opacity: 0.5;
+	transition: all 0.3s ease 0s;
+}
+.settings-update img:hover {
+	opacity: 0.9;
 }
 
 .language {
@@ -664,10 +743,6 @@ align-items: start;
 		width: 160px;
 		min-height: 160px;  
 		font-size: 12px;
-	}
-
-	.description-container {
-
 	}
 	
 	.weather-icon {
