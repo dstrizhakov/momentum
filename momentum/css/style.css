@@ -476,7 +476,7 @@ transition: all 0.3s ease 0s;
 .settings-modal {
 	z-index: 10;
 	position: absolute;
-	bottom: 70px;
+	bottom: 60px;
 	left: 8px;
 	width: 305px;
 	padding: 20px;
@@ -495,9 +495,9 @@ transition: all 0.3s ease 0s;
 	visibility: visible;
 	transform: translate(0, 0);
 }
+
 .settings-title {
 margin-bottom: 8px;
-	font-weight: 400;
 }
 .settings-modal::before {
 	content: "";
@@ -510,6 +510,144 @@ margin-bottom: 8px;
 	bottom: -16px;
 	left: 16px;
 }
+.todo {
+	cursor: pointer;
+	padding: 5px 0;
+}
+.todo-modal {
+	z-index: 2;
+position: absolute;
+bottom: 60px;
+left: 90px;
+width: 320px;
+padding: 20px 20px 30px 30px;
+height: 400px;
+color: var(--main-font-color);
+background-color: var(--main-background);
+border-radius: 10px;
+box-shadow: 0px 0px 20px var(--main-shadow-color);
+opacity: 0;
+visibility: hidden;
+transform: translate(0, 10px);
+transition: all 0.3s ease 0s;
+
+}
+.todo-modal.active {
+opacity: 1;
+visibility: visible;
+transform: translate(0, 0);
+}
+
+.todo-modal::before {
+	content: "";
+	display: block;
+	width: 0; 
+	height: 0; 
+	border: 8px solid transparent;
+	border-top: 8px solid var(--main-background);
+	position: absolute;
+	bottom: -16px;
+	left: 16px;
+}
+
+.todo-list {
+list-style: none;
+overflow: auto
+}
+
+.todo-item {
+	position: relative;
+	cursor: pointer;
+display: flex;
+justify-content: space-between;
+padding: 10px 2px 2px 20px;
+border-bottom: 1px solid var(--main-border);
+font-size: 14px;
+font-style: italic;
+text-align: left;
+}
+
+.todo-item.checked {
+color: var(--main-shadow-color);
+}
+.todo-item.checked span {
+	color: var(--main-font-color);
+}
+
+.todo-item.checked::before {
+  content: '';
+  position: absolute;
+  border-color: var(--main-color);
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 5px;
+  transform: rotate(45deg);
+  height: 10px;
+  width: 5px;
+}
+.todo-item::before {
+  content: '';
+  position: absolute;
+  border-color: var(--unactive);
+  border-style: solid;
+  border-width: 0 2px 2px 0;
+  top: 10px;
+  left: 5px;
+  transform: rotate(45deg);
+  height: 10px;
+  width: 5px;
+}
+
+.todo-item.hidden {
+	display: none;
+}
+
+.todo-list li span {
+	font-size: 20px;
+	text-decoration: none;
+	cursor: pointer;
+	transform: translate(-6px);
+}
+.todo-list li span {
+text-decoration: none;
+width: 15px;
+}
+
+.todo-modal-wrapper {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	height: 100%;
+}
+.todo-set {
+	margin: 10px 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	width: 100%;
+	border-radius: 5px;
+	border: 1px solid var(--main-border);
+}
+.todo-set input {
+	color: var(--main-font-color);
+	font-style: italic;
+	width: 100%;
+	padding: 8px;
+	border: none;
+	border-radius: 5px 0px 0px 5px;
+	border-right: 1px solid var(--main-border);
+}
+.todo-add {
+	padding: 0 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}
+
+
+
 .settings-background {
 	display: block;
 	padding: 5px;
@@ -776,5 +914,16 @@ font-size: 14px;
 	}
 	.author {
 		font-size: 12px;
+	}
+	.todo-modal {
+		z-index: 2;
+	position: absolute;
+	bottom: 60px;
+	left: 10px;
+	width: 300px;
+	height: 400px;
+	}
+	.todo-modal::before {
+		left: 90px;
 	}
 }

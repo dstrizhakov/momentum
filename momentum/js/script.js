@@ -20,6 +20,7 @@ const authorEl = document.querySelector(".author");
 const playPauseBtn = document.querySelector(".play-pause");
 const playListContainer = document.querySelector(".play-list");
 const settingsModal = document.querySelector(".settings-modal");
+const todoModal = document.querySelector(".todo-modal");
 const checkAudioEl = document.getElementById("check-audio");
 const checkWeatherEl = document.getElementById("check-weather");
 const checkClockEl = document.getElementById("check-clock");
@@ -502,7 +503,7 @@ function getLocalStorage() {
     languageEl.textContent = "EN";
   }
   setPlaceholder();
-  // recall settings
+
   setSettingsLanuage();
   if (localStorage.getItem("player") === "false") {
     checkAudioEl.removeAttribute("checked");
@@ -537,6 +538,7 @@ function getLocalStorage() {
     }
     setBg();
   }
+  getWeather();
 }
 window.addEventListener("load", getLocalStorage);
 
@@ -586,6 +588,12 @@ body.addEventListener("click", (event) => {
   // обработка кнопки .settings-update
   if (event.target.closest(".settings-update")) {
     updateTags();
+  }
+  // обработка кнопки .settings-update
+  if (event.target.closest(".todo")) {
+    todoModal.classList.toggle("active");
+  } else if (!event.target.closest(".todo-modal")) {
+    todoModal.classList.remove("active");
   }
 });
 
@@ -677,3 +685,46 @@ function recallTags() {
 // function renderAll() {
 //   showTime();
 // }
+
+//==================================================================
+//TODO
+//==================================================================
+
+const todoInput = document.querySelector(".todo-input");
+const todoList = document.querySelector(".todo-list");
+const addTodoButton = document.querySelector(".todo-add");
+
+function createTodoItem() {
+  const li = document.createElement("li");
+  li.classList.add("todo-item");
+  let inputValue = todoInput.value;
+  let text = document.createTextNode(inputValue);
+  li.appendChild(text);
+  if (inputValue === "") {
+    alert("Вы должны что-то написать!");
+  } else {
+    todoList.appendChild(li);
+  }
+  todoInput.value = "";
+
+  let span = document.createElement("span");
+  const closeText = document.createTextNode("\u00D7");
+  span.className = "close";
+  span.appendChild(closeText);
+  li.appendChild(span);
+  span.addEventListener("click", () => hideTodoItem(span));
+}
+
+function hideTodoItem(element) {
+  let parentElement = element.parentElement;
+  parentElement.classList.add("hidden");
+}
+
+function completeTodoItem(event) {
+  if (event.target.closest(".todo-item")) {
+    event.target.classList.toggle("checked");
+  }
+}
+
+addTodoButton.addEventListener("click", createTodoItem);
+todoList.addEventListener("click", (event) => completeTodoItem(event));
