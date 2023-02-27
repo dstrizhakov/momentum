@@ -245,6 +245,7 @@ async function getWeather() {
     humidity.textContent = null;
   } else {
     const data = await res.json();
+    console.log(data);
     weatherError.textContent = null;
     weatherIcon.className = "weather-icon owf";
     weatherIcon.classList.add(`owf-${data.weather[0].id}`);
@@ -680,12 +681,6 @@ function recallTags() {
   query = currentTags;
 }
 
-// первоначальная подгрузка данных
-// document.addEventListener("DOMContentLoaded", renderAll());
-// function renderAll() {
-//   showTime();
-// }
-
 //==================================================================
 //TODO
 //==================================================================
@@ -728,3 +723,10 @@ function completeTodoItem(event) {
 
 addTodoButton.addEventListener("click", createTodoItem);
 todoList.addEventListener("click", (event) => completeTodoItem(event));
+
+// первоначальная подгрузка данных
+document.addEventListener("DOMContentLoaded", renderAll());
+function renderAll() {
+  showTime();
+  setBg();
+}
