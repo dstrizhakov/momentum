@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link href="assets/favicon.ico" rel="shortcut icon" />
+	<link rel="stylesheet" href="css/owfont-regular.css" />
+	<link rel="stylesheet" href="css/style.css" />
+	<script defer type="module" src="js/script.js"></script>
+	<title>momentum</title>
+</head>
+
+<body>
+	<header class="header">
+		<div class="player">
+			<div class="player-controls">
+				<button class="play-prev player-icon"></button>
+				<button class="play play-pause player-icon"></button>
+				<button class="play-next player-icon"></button>
+				<div class="volume-container">
+					<div class="volume-button">
+						<div class="volume volume-icon icon-volume"></div>
+					</div>
+					<div class="volume-slider">
+						<div class="volume-percentage"></div>
+					</div>
+				</div>
+			</div>
+			<div class="timeline">
+				<div class="progress"></div>
+			</div>
+			<div class="audio-time">
+				<div class="current">--:--</div>
+				<div class="divider">/</div>
+				<div class="length">--:--</div>
+			</div>
+			<ul class="play-list"></ul>
+		</div>
+		<div class="weather">
+			<input type="text" class="city" />
+			<div class="weather-error"></div>
+			<div class="description-container">
+				<i class="weather-icon owf"></i>
+				<span class="temperature"></span>
+			</div>
+			<span class="weather-description"></span>
+			<div class="wind"></div>
+			<div class="humidity"></div>
+		</div>
+	</header>
+	<main class="main">
+		<div class="slider-icons">
+			<button class="slide-prev slider-icon"></button>
+			<button class="slide-next slider-icon"></button>
+		</div>
+		<time class="time"></time>
+		<date class="date"></date>
+		<div class="greeting-container">
+			<span class="greeting"></span>
+			<input type="text" class="name" />
+		</div>
+	</main>
+	<footer class="footer">
+		<button class="change-quote"></button>
+		<div class="quote-container">
+			<div class="quote"></div>
+			<div class="author"></div>
+		</div>
+		<div class="copyright">
+			<div class="settings-modal">
+				<h3 class="settings-title">Настройки</h3>
+				<form action="#">
+					<ul id="settings-modules" class="settings-modules">
+						<li class="settings-module">
+							<p class="settings-module-player">Аудиоплеер</p>
+							<input checked type="checkbox" class="checkbox" id="check-audio">
+							<label for="check-audio"></label> 
+						</li>
+						<li class="settings-module">
+							<p class="settings-module-weather">Погода</p>
+							<input checked type="checkbox" class="checkbox" id="check-weather">
+							<label for="check-weather"></label> 
+						</li>
+						<li class="settings-module">
+							<p class="settings-module-clock">Часы</p>
+							<input checked type="checkbox" class="checkbox" id="check-clock">
+							<label for="check-clock"></label> 
+						</li>
+						<li class="settings-module">
+							<p class="settings-module-date">Дата</p>
+							<input checked type="checkbox" class="checkbox" id="check-date">
+							<label for="check-date"></label> 
+						</li>
+						<li class="settings-module">
+							<p class="settings-module-welcome">Приветствие</p>
+							<input checked type="checkbox" class="checkbox" id="check-welcome">
+							<label for="check-welcome"></label> 
+						</li>
+						<li class="settings-module">
+							<p class="settings-module-quotes">Цитата</p>
+							<input checked type="checkbox" class="checkbox" id="check-quotes">
+							<label for="check-quotes"></label> 
+						</li>
+						<li class="settings-background">
+							<p class="settings-module-background">Источник фонов</p>
+							<div class="form_radio_group">
+								<div class="form_radio_group-item">
+									<input id="Github" type="radio" name="background" value="github" checked>
+									<label for="Github">Github</label>
+								</div>
+								<div class="form_radio_group-item">
+									<input id="Unsplash" type="radio" name="background" value="unsplash">
+									<label for="Unsplash">Unsplash</label>
+								</div>
+								<div class="form_radio_group-item">
+									<input id="Flickr" type="radio" name="background" value="flickr">
+									<label for="Flickr">Flickr</label>
+								</div>
+							</div>
+						</li>
+						<li class="settings-module">
+							<div class="settings-input">
+								<input class="settings-tags" type="text">
+								<div class="settings-update"></div>
+							</div>
+						</li>
+					</ul>
+				</form>	
+			</div>
+			<div class="todo-modal">
+				<h3>Todo</h3>
+				<div class="todo-modal-wrapper">
+					<ul class="todo-list">
+					</ul>
+					<div class="todo-set">
+						<input class="todo-input" type="text">
+						<div class="todo-add">+</div>
+					</div>
+				</div>
+				
+			</div>
+			<div class="settings">
+				<div class="settings-button">
+					<img src="./assets/svg/settings.svg" alt="settongs">
+				</div>
+				<div class="language"></div>
+				<div class="todo">Todo</div>
+			</div>
+			<a href="https://github.com/dstrizhakov">
+				<img src="./assets/svg/github_logo.svg" alt="github logo">
+				<span>2023</span>
+			</a>
+			<a href="https://rs.school/js/">
+				<img src="./assets/svg/rs_school_js.svg" alt="rs school js">
+			</a>
+		</div>
+	</footer>
+</body>
+
+</html>
